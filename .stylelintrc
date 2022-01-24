@@ -10,14 +10,6 @@
       "ignoreAtRules": ["svg-load"]
     }],
 
-
-    "alpha-value-notation": null,
-    "at-rule-no-vendor-prefix": null,
-    "color-function-notation": null,
-    "function-url-quotes": null,
     "property-no-vendor-prefix": null,
-    "selector-no-vendor-prefix": null,
-    "string-quotes": null,
-    "value-no-vendor-prefix": null
   }
 }
