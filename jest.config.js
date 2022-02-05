@@ -3,7 +3,7 @@ export default {
         '<rootDir>/src',
         '<rootDir>/test/browser',
         '<rootDir>/test/build',
-        '<rootDir>/test/integration/lib'
+        '<rootDir>/test/query'
     ],
     'testMatch': [
         '**/__tests__/**/*.+(ts|tsx|js)',
