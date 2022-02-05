@@ -24,7 +24,7 @@ const vt = new VectorTile(new Protobuf(fs.readFileSync(path.resolve(__dirname, '
 const feature = vt.layers.place_label.feature(10);
 
 /*eslint new-cap: 0*/
-const collisionBoxArray = new CollisionBoxArray();
+  const collisionBoxArray = new CollisionBoxArray();
 const transform = new Transform();
 transform.width = 100;
 transform.height = 100;
