@@ -41,7 +41,6 @@ import DragPanHandler, {DragPanOptions} from './handler/shim/drag_pan';
 
 import type KeyboardHandler from './handler/keyboard';
 import type DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
-import type TouchZoomRotateHandler from './handler/shim/touch_zoom_rotate';
 import defaultLocale from './default_locale';
 import type {TaskID} from '../util/task_queue';
 import type {Cancelable} from '../types/cancelable';
@@ -349,12 +348,6 @@ class Map extends Camera {
      * Find more details and examples using `doubleClickZoom` in the {@link DoubleClickZoomHandler} section.
      */
     doubleClickZoom: DoubleClickZoomHandler;
-
-    /**
-     * The map's {@link TouchZoomRotateHandler}, which allows the user to zoom or rotate the map with touch gestures.
-     * Find more details and examples using `touchZoomRotate` in the {@link TouchZoomRotateHandler} section.
-     */
-    touchZoomRotate: TouchZoomRotateHandler;
 
     constructor(options: MapOptions) {
         PerformanceUtils.mark(PerformanceMarkers.create);
