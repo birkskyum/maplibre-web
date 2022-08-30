@@ -3,10 +3,7 @@ import DOM from '../util/dom';
 import Map, {CompleteMapOptions} from './map';
 import {MapEventHandler, BlockableMapEventHandler} from './handler/map_event';
 import BoxZoomHandler from './handler/box_zoom';
-import TapZoomHandler from './handler/tap_zoom';
 import KeyboardHandler from './handler/keyboard';
-import DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
-import ClickZoomHandler from './handler/click_zoom';
 import {bindAll, extend} from '../util/util';
 import Point from '@mapbox/point-geometry';
 import LngLat from '../geo/lng_lat';
@@ -173,18 +170,12 @@ class HandlerManager {
         const boxZoom = map.boxZoom = new BoxZoomHandler(map, options);
         this._add('boxZoom', boxZoom);
 
-        const tapZoom = new TapZoomHandler();
-        const clickZoom = new ClickZoomHandler();
-        map.doubleClickZoom = new DoubleClickZoomHandler(clickZoom, tapZoom);
-        this._add('tapZoom', tapZoom);
-        this._add('clickZoom', clickZoom);
-
         const keyboard = map.keyboard = new KeyboardHandler();
         this._add('keyboard', keyboard);
 
         this._add('blockableMapEvent', new BlockableMapEventHandler(map));
 
-        for (const name of ['boxZoom', 'doubleClickZoom', 'tapDragZoom', 'keyboard']) {
+        for (const name of ['boxZoom', 'tapDragZoom', 'keyboard']) {
             if (options.interactive && options[name]) {
                 map[name].enable(options[name]);
             }

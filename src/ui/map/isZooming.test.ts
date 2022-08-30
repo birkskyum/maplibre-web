@@ -39,26 +39,4 @@ describe('Map#isZooming', () => {
         map.zoomTo(5, {duration: 0});
     });
 
-    test('returns true when double-click zooming', done => {
-        const map = createMap();
-
-        map.on('zoomstart', () => {
-            expect(map.isZooming()).toBe(true);
-        });
-
-        map.on('zoomend', () => {
-            expect(map.isZooming()).toBe(false);
-            map.remove();
-            done();
-        });
-
-        let now = 0;
-        jest.spyOn(browser, 'now').mockImplementation(() => { return now; });
-
-        simulate.dblclick(map.getCanvas());
-        map._renderTaskQueue.run();
-
-        now += 500;
-        map._renderTaskQueue.run();
-    });
 });

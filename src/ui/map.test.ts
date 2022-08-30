@@ -60,7 +60,6 @@ describe('Map', () => {
         expect(map.getContainer()).toBeTruthy();
         expect(map.getStyle()).toBeUndefined();
         expect(map.boxZoom.isEnabled()).toBeTruthy();
-        expect(map.doubleClickZoom.isEnabled()).toBeTruthy();
         expect(map.keyboard.isEnabled()).toBeTruthy();
         expect(() => {
             new Map({
@@ -112,14 +111,12 @@ describe('Map', () => {
             const map = createMap({interactive: false});
 
             expect(map.boxZoom.isEnabled()).toBeFalsy();
-            expect(map.doubleClickZoom.isEnabled()).toBeFalsy();
             expect(map.keyboard.isEnabled()).toBeFalsy();
         });
 
         const handlerNames = [
             'boxZoom',
             'keyboard',
-            'doubleClickZoom',
         ];
         handlerNames.forEach((handlerName) => {
             test(`disables "${handlerName}" handler`, () => {

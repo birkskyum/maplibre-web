@@ -37,7 +37,6 @@ import type {PointLike} from './camera';
 import type BoxZoomHandler from './handler/box_zoom';
 
 import type KeyboardHandler from './handler/keyboard';
-import type DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
 import defaultLocale from './default_locale';
 import type {TaskID} from '../util/task_queue';
 import type {Cancelable} from '../types/cancelable';
@@ -75,7 +74,6 @@ export type MapOptions = {
     maxPitch?: number | null;
     boxZoom?: boolean;
     keyboard?: boolean;
-    doubleClickZoom?: boolean;
     cooperativeGestures?: boolean | GestureOptions;
     trackResize?: boolean;
     center?: LngLatLike;
@@ -137,7 +135,6 @@ const defaultOptions = {
     interactive: true,
     boxZoom: true,
     keyboard: true,
-    doubleClickZoom: true,
     cooperativeGestures: undefined,
 
     bearingSnap: 7,
@@ -314,12 +311,6 @@ class Map extends Camera {
      * shortcuts. Find more details and examples using `keyboard` in the {@link KeyboardHandler} section.
      */
     keyboard: KeyboardHandler;
-
-    /**
-     * The map's {@link DoubleClickZoomHandler}, which allows the user to zoom by double clicking.
-     * Find more details and examples using `doubleClickZoom` in the {@link DoubleClickZoomHandler} section.
-     */
-    doubleClickZoom: DoubleClickZoomHandler;
 
     constructor(options: MapOptions) {
         PerformanceUtils.mark(PerformanceMarkers.create);
