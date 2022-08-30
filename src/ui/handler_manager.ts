@@ -1,7 +1,6 @@
 import {Event} from '../util/evented';
 import DOM from '../util/dom';
 import Map, {CompleteMapOptions} from './map';
-import HandlerInertia from './handler_inertia';
 import {MapEventHandler, BlockableMapEventHandler} from './handler/map_event';
 import BoxZoomHandler from './handler/box_zoom';
 import TapZoomHandler from './handler/tap_zoom';
@@ -92,7 +91,6 @@ class HandlerManager {
     }>;
     _eventsInProgress: any;
     _frameId: number;
-    _inertia: HandlerInertia;
     _bearingSnap: number;
     _handlersById: {[x: string]: Handler};
     _updatingCamera: boolean;
@@ -111,7 +109,6 @@ class HandlerManager {
         this._handlersById = {};
         this._changes = [];
 
-        this._inertia = new HandlerInertia(map);
         this._bearingSnap = options.bearingSnap;
         this._previousActiveHandlers = {};
 
@@ -227,7 +224,6 @@ class HandlerManager {
         for (const {handler} of this._handlers) {
             handler.reset();
         }
-        this._inertia.clear();
         this._fireEvents({}, {}, allowEndAnimation);
         this._changes = [];
     }
@@ -342,7 +338,6 @@ class HandlerManager {
 
         const {cameraAnimation} = mergedHandlerResult;
         if (cameraAnimation) {
-            this._inertia.clear();
             this._fireEvents({}, {}, true);
             this._changes = [];
             cameraAnimation(this._map);
@@ -449,7 +444,6 @@ class HandlerManager {
         }
 
         this._map._update();
-        if (!combinedResult.noInertia) this._inertia.record(combinedResult);
         this._fireEvents(combinedEventsInProgress, deactivatedHandlers, true);
 
     }
@@ -506,21 +500,14 @@ class HandlerManager {
         const stillMoving = isMoving(this._eventsInProgress);
         if (allowEndAnimation && (wasMoving || nowMoving) && !stillMoving) {
             this._updatingCamera = true;
-            const inertialEase = this._inertia._onMoveEnd(this._map.dragPan._inertiaOptions);
 
             const shouldSnapToNorth = bearing => bearing !== 0 && -this._bearingSnap < bearing && bearing < this._bearingSnap;
 
-            if (inertialEase) {
-                if (shouldSnapToNorth(inertialEase.bearing || this._map.getBearing())) {
-                    inertialEase.bearing = 0;
-                }
-                this._map.easeTo(inertialEase, {originalEvent: originalEndEvent});
-            } else {
-                this._map.fire(new Event('moveend', {originalEvent: originalEndEvent}));
-                if (shouldSnapToNorth(this._map.getBearing())) {
-                    this._map.resetNorth();
-                }
+            this._map.fire(new Event('moveend', {originalEvent: originalEndEvent}));
+            if (shouldSnapToNorth(this._map.getBearing())) {
+                this._map.resetNorth();
             }
+
             this._updatingCamera = false;
         }
 
