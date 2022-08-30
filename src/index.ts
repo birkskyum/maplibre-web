@@ -2,14 +2,11 @@ import {supported} from '@mapbox/mapbox-gl-supported';
 import packageJSON from '../package.json' assert {type: 'json'};
 import Map from './ui/map';
 import NavigationControl from './ui/control/navigation_control';
-import GeolocateControl from './ui/control/geolocate_control';
 import AttributionControl from './ui/control/attribution_control';
 import LogoControl from './ui/control/logo_control';
 import ScaleControl from './ui/control/scale_control';
 import FullscreenControl from './ui/control/fullscreen_control';
 import TerrainControl from './ui/control/terrain_control';
-import Popup from './ui/popup';
-import Marker from './ui/marker';
 import Style from './style/style';
 import LngLat from './geo/lng_lat';
 import LngLatBounds from './geo/lng_lat_bounds';
@@ -43,14 +40,11 @@ const exported = {
     getRTLTextPluginStatus,
     Map,
     NavigationControl,
-    GeolocateControl,
     AttributionControl,
     LogoControl,
     ScaleControl,
     FullscreenControl,
     TerrainControl,
-    Popup,
-    Marker,
     Style,
     LngLat,
     LngLatBounds,
