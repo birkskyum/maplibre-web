@@ -54,7 +54,6 @@ const version = packageJSON.version;
 
 /* eslint-enable no-use-before-define */
 export type MapOptions = {
-    interactive?: boolean;
     container: HTMLElement | string;
     bearingSnap?: number;
     attributionControl?: boolean;
@@ -70,9 +69,6 @@ export type MapOptions = {
     maxZoom?: number | null;
     minPitch?: number | null;
     maxPitch?: number | null;
-    boxZoom?: boolean;
-    keyboard?: boolean;
-    cooperativeGestures?: boolean | GestureOptions;
     trackResize?: boolean;
     center?: LngLatLike;
     zoom?: number;
@@ -129,11 +125,6 @@ const defaultOptions = {
 
     minPitch: defaultMinPitch,
     maxPitch: defaultMaxPitch,
-
-    interactive: true,
-    boxZoom: true,
-    keyboard: true,
-    cooperativeGestures: undefined,
 
     bearingSnap: 7,
     clickTolerance: 3,
@@ -322,8 +313,6 @@ class Map extends Camera {
         const transform = new Transform(options.minZoom, options.maxZoom, options.minPitch, options.maxPitch, options.renderWorldCopies);
         super(transform, {bearingSnap: options.bearingSnap});
 
-        this._interactive = options.interactive;
-        this._cooperativeGestures = options.cooperativeGestures;
         this._maxTileCacheSize = options.maxTileCacheSize;
         this._failIfMajorPerformanceCaveat = options.failIfMajorPerformanceCaveat;
         this._preserveDrawingBuffer = options.preserveDrawingBuffer;
