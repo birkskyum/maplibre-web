@@ -70,7 +70,7 @@ const hillshadeUniformValues = (
     if (layer.paint.get('hillshade-illumination-anchor') === 'viewport') {
         azimuthal -= painter.transform.angle;
     }
-    const align = !painter.options.moving;
+    const align = true;
     return {
         'u_matrix': coord ? coord.posMatrix : painter.transform.calculatePosMatrix(tile.tileID.toUnwrapped(), align),
         'u_image': 0,

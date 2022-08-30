@@ -8,7 +8,6 @@ import Style from '../style/style';
 import EvaluationParameters from '../style/evaluation_parameters';
 import Painter from '../render/painter';
 import Transform from '../geo/transform';
-import HandlerManager from './handler_manager';
 import Camera, {CameraOptions} from './camera';
 import LngLat from '../geo/lng_lat';
 import LngLatBounds from '../geo/lng_lat_bounds';
@@ -244,7 +243,6 @@ const defaultOptions = {
 class Map extends Camera {
     style: Style;
     painter: Painter;
-    handlers: HandlerManager;
 
     _container: HTMLElement;
     _canvasContainer: HTMLElement;
@@ -375,8 +373,6 @@ class Map extends Camera {
             addEventListener('resize', this._onWindowResize, false);
             addEventListener('orientationchange', this._onWindowResize, false);
         }
-
-        this.handlers = new HandlerManager(this, options as CompleteMapOptions);
 
         if (this._cooperativeGestures) {
             this._setupCooperativeGestures();
@@ -833,36 +829,6 @@ class Map extends Camera {
      */
     unproject(point: PointLike) {
         return this.transform.pointLocation(Point.convert(point), this.style && this.style.terrain);
-    }
-
-    /**
-     * Returns true if the map is panning, zooming, rotating, or pitching due to a camera animation or user gesture.
-     * @returns {boolean} True if the map is moving.
-     * @example
-     * var isMoving = map.isMoving();
-     */
-    isMoving(): boolean {
-        return this._moving || this.handlers.isMoving();
-    }
-
-    /**
-     * Returns true if the map is zooming due to a camera animation or user gesture.
-     * @returns {boolean} True if the map is zooming.
-     * @example
-     * var isZooming = map.isZooming();
-     */
-    isZooming(): boolean {
-        return this._zooming || this.handlers.isZooming();
-    }
-
-    /**
-     * Returns true if the map is rotating due to a camera animation or user gesture.
-     * @returns {boolean} True if the map is rotating.
-     * @example
-     * map.isRotating();
-     */
-    isRotating(): boolean {
-        return this._rotating || this.handlers.isRotating();
     }
 
     _createDelegatedListener(type: MapEvent | string, layerId: string, listener: Listener):
@@ -2567,9 +2533,6 @@ class Map extends Camera {
         this.painter.render(this.style, {
             showTileBoundaries: this.showTileBoundaries,
             showOverdrawInspector: this._showOverdrawInspector,
-            rotating: this.isRotating(),
-            zooming: this.isZooming(),
-            moving: this.isMoving(),
             fadeDuration: this._fadeDuration,
             showPadding: this.showPadding,
             gpuTiming: !!this.listens('gpu-timing-layer'),
@@ -2629,7 +2592,7 @@ class Map extends Camera {
         const somethingDirty = this._sourcesDirty || this._styleDirty || this._placementDirty;
         if (somethingDirty || this._repaint) {
             this.triggerRepaint();
-        } else if (!this.isMoving() && this.loaded()) {
+        } else if (this.loaded()) {
             this.fire(new Event('idle'));
         }
 
@@ -2679,8 +2642,6 @@ class Map extends Camera {
         }
         this._renderTaskQueue.clear();
         this.painter.destroy();
-        this.handlers.destroy();
-        delete this.handlers;
         this.setStyle(null);
         if (typeof window !== 'undefined') {
             removeEventListener('resize', this._onWindowResize, false);

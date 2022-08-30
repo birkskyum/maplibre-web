@@ -69,9 +69,6 @@ type PainterOptions = {
     showOverdrawInspector: boolean;
     showTileBoundaries: boolean;
     showPadding: boolean;
-    rotating: boolean;
-    zooming: boolean;
-    moving: boolean;
     gpuTiming: boolean;
     fadeDuration: number;
 };

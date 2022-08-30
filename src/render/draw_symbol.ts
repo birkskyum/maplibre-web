@@ -317,12 +317,12 @@ function drawLayerSymbols(
                 texSizeIcon = tile.imageAtlasTexture.size;
                 atlasTextureIcon = tile.imageAtlasTexture;
                 const zoomDependentSize = sizeData.kind === 'composite' || sizeData.kind === 'camera';
-                atlasInterpolationIcon = transformed || painter.options.rotating || painter.options.zooming || zoomDependentSize ? gl.LINEAR : gl.NEAREST;
+                atlasInterpolationIcon = transformed || zoomDependentSize ? gl.LINEAR : gl.NEAREST;
             }
         } else {
             const iconScaled = layer.layout.get('icon-size').constantOr(0) !== 1 || bucket.iconsNeedLinear;
             atlasTexture = tile.imageAtlasTexture;
-            atlasInterpolation = isSDF || painter.options.rotating || painter.options.zooming || iconScaled || transformed ?
+            atlasInterpolation = isSDF ||  iconScaled || transformed ?
                 gl.LINEAR :
                 gl.NEAREST;
             texSize = tile.imageAtlasTexture.size;

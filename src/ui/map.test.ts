@@ -1882,19 +1882,6 @@ describe('Map', () => {
         });
     });
 
-    test('no idle event during move', done => {
-        const style = createStyle();
-        const map = createMap({style, fadeDuration: 0});
-        map.once('idle', () => {
-            map.zoomTo(0.5, {duration: 100});
-            expect(map.isMoving()).toBeTruthy();
-            map.once('idle', () => {
-                expect(!map.isMoving()).toBeTruthy();
-                done();
-            });
-        });
-    });
-
     test('#removeLayer restores Map#loaded() to true', done => {
         const map = createMap({
             style: extend(createStyle(), {
@@ -1934,20 +1921,6 @@ describe('Map', () => {
         expect(map.isEasing()).toBe(true);
 
         map.remove();
-    });
-
-    test('continues camera animation on resize', () => {
-        const map = createMap(),
-            container = map.getContainer();
-
-        map.flyTo({center: [200, 0], duration: 100});
-
-        Object.defineProperty(container, 'clientWidth', {value: 250});
-        Object.defineProperty(container, 'clientHeight', {value: 250});
-        map.resize();
-
-        expect(map.isMoving()).toBeTruthy();
-
     });
 
     test('map fires `styleimagemissing` for missing icons', done => {

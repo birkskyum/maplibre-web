@@ -31,7 +31,7 @@ function drawRaster(painter: Painter, sourceCache: SourceCache, layer: RasterSty
 
     const minTileZ = coords[coords.length - 1].overscaledZ;
 
-    const align = !painter.options.moving;
+    const align = true;
     for (const coord of coords) {
         // Set the lower zoom level to sublayer 0, and higher zoom levels to higher sublayers
         // Use gl.LESS to prevent double drawing in areas where tiles overlap.

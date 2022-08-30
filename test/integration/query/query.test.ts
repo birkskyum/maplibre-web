@@ -50,11 +50,9 @@ function performQueryOnFixture(fixture)  {
             },
             idle(map, params, done) {
                 const idle = function() {
-                    if (!map.isMoving()) {
-                        done();
-                    } else {
-                        map.once('render', idle);
-                    }
+
+                    done();
+
                 };
                 idle();
             }
