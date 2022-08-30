@@ -9,7 +9,6 @@ import {MousePanHandler, MouseRotateHandler, MousePitchHandler} from './handler/
 import TouchPanHandler from './handler/touch_pan';
 import {TouchZoomHandler, TouchRotateHandler, TouchPitchHandler} from './handler/touch_zoom_rotate';
 import KeyboardHandler from './handler/keyboard';
-import ScrollZoomHandler from './handler/scroll_zoom';
 import DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
 import ClickZoomHandler from './handler/click_zoom';
 import TapDragZoomHandler from './handler/tap_drag_zoom';
