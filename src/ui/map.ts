@@ -36,7 +36,6 @@ import type {StyleImageInterface, StyleImageMetadata} from '../style/style_image
 import type {PointLike} from './camera';
 import type BoxZoomHandler from './handler/box_zoom';
 
-import type KeyboardHandler from './handler/keyboard';
 import defaultLocale from './default_locale';
 import type {TaskID} from '../util/task_queue';
 import type {Cancelable} from '../types/cancelable';
@@ -305,12 +304,6 @@ class Map extends Camera {
      * Find more details and examples using `boxZoom` in the {@link BoxZoomHandler} section.
      */
     boxZoom: BoxZoomHandler;
-
-    /**
-     * The map's {@link KeyboardHandler}, which allows the user to zoom, rotate, and pan the map using keyboard
-     * shortcuts. Find more details and examples using `keyboard` in the {@link KeyboardHandler} section.
-     */
-    keyboard: KeyboardHandler;
 
     constructor(options: MapOptions) {
         PerformanceUtils.mark(PerformanceMarkers.create);

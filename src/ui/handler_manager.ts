@@ -170,12 +170,9 @@ class HandlerManager {
         const boxZoom = map.boxZoom = new BoxZoomHandler(map, options);
         this._add('boxZoom', boxZoom);
 
-        const keyboard = map.keyboard = new KeyboardHandler();
-        this._add('keyboard', keyboard);
-
         this._add('blockableMapEvent', new BlockableMapEventHandler(map));
 
-        for (const name of ['boxZoom', 'tapDragZoom', 'keyboard']) {
+        for (const name of ['boxZoom',]) {
             if (options.interactive && options[name]) {
                 map[name].enable(options[name]);
             }
