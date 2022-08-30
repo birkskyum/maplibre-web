@@ -35,8 +35,6 @@ import type {CustomLayerInterface} from '../style/style_layer/custom_style_layer
 import type {StyleImageInterface, StyleImageMetadata} from '../style/style_image';
 import type {PointLike} from './camera';
 import type BoxZoomHandler from './handler/box_zoom';
-import type DragRotateHandler from './handler/shim/drag_rotate';
-import DragPanHandler, {DragPanOptions} from './handler/shim/drag_pan';
 
 import type KeyboardHandler from './handler/keyboard';
 import type DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
@@ -76,8 +74,6 @@ export type MapOptions = {
     minPitch?: number | null;
     maxPitch?: number | null;
     boxZoom?: boolean;
-    dragRotate?: boolean;
-    dragPan?: DragPanOptions | boolean;
     keyboard?: boolean;
     doubleClickZoom?: boolean;
     cooperativeGestures?: boolean | GestureOptions;
@@ -140,8 +136,6 @@ const defaultOptions = {
 
     interactive: true,
     boxZoom: true,
-    dragRotate: true,
-    dragPan: true,
     keyboard: true,
     doubleClickZoom: true,
     cooperativeGestures: undefined,
@@ -314,19 +308,6 @@ class Map extends Camera {
      * Find more details and examples using `boxZoom` in the {@link BoxZoomHandler} section.
      */
     boxZoom: BoxZoomHandler;
-
-    /**
-     * The map's {@link DragRotateHandler}, which implements rotating the map while dragging with the right
-     * mouse button or with the Control key pressed. Find more details and examples using `dragRotate`
-     * in the {@link DragRotateHandler} section.
-     */
-    dragRotate: DragRotateHandler;
-
-    /**
-     * The map's {@link DragPanHandler}, which implements dragging the map with a mouse or touch gesture.
-     * Find more details and examples using `dragPan` in the {@link DragPanHandler} section.
-     */
-    dragPan: DragPanHandler;
 
     /**
      * The map's {@link KeyboardHandler}, which allows the user to zoom, rotate, and pan the map using keyboard

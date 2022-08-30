@@ -4,13 +4,9 @@ import Map, {CompleteMapOptions} from './map';
 import {MapEventHandler, BlockableMapEventHandler} from './handler/map_event';
 import BoxZoomHandler from './handler/box_zoom';
 import TapZoomHandler from './handler/tap_zoom';
-import {MousePanHandler, MouseRotateHandler, MousePitchHandler} from './handler/mouse';
-import TouchPanHandler from './handler/touch_pan';
 import KeyboardHandler from './handler/keyboard';
 import DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
 import ClickZoomHandler from './handler/click_zoom';
-import DragPanHandler from './handler/shim/drag_pan';
-import DragRotateHandler from './handler/shim/drag_rotate';
 import {bindAll, extend} from '../util/util';
 import Point from '@mapbox/point-geometry';
 import LngLat from '../geo/lng_lat';
@@ -172,7 +168,6 @@ class HandlerManager {
 
     _addDefaultHandlers(options: CompleteMapOptions) {
         const map = this._map;
-        const el = map.getCanvasContainer();
         this._add('mapEvent', new MapEventHandler(map, options));
 
         const boxZoom = map.boxZoom = new BoxZoomHandler(map, options);
@@ -184,24 +179,12 @@ class HandlerManager {
         this._add('tapZoom', tapZoom);
         this._add('clickZoom', clickZoom);
 
-        const mouseRotate = new MouseRotateHandler(options);
-        const mousePitch = new MousePitchHandler(options);
-        map.dragRotate = new DragRotateHandler(options, mouseRotate, mousePitch);
-        this._add('mouseRotate', mouseRotate, ['mousePitch']);
-        this._add('mousePitch', mousePitch, ['mouseRotate']);
-
-        const mousePan = new MousePanHandler(options);
-        const touchPan = new TouchPanHandler(options, map);
-        map.dragPan = new DragPanHandler(el, mousePan, touchPan);
-        this._add('mousePan', mousePan);
-        this._add('touchPan', touchPan, ['touchZoom', 'touchRotate']);
-
         const keyboard = map.keyboard = new KeyboardHandler();
         this._add('keyboard', keyboard);
 
         this._add('blockableMapEvent', new BlockableMapEventHandler(map));
 
-        for (const name of ['boxZoom', 'doubleClickZoom', 'tapDragZoom', 'dragRotate', 'dragPan', 'keyboard']) {
+        for (const name of ['boxZoom', 'doubleClickZoom', 'tapDragZoom', 'keyboard']) {
             if (options.interactive && options[name]) {
                 map[name].enable(options[name]);
             }

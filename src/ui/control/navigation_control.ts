@@ -2,7 +2,6 @@ import Point from '@mapbox/point-geometry';
 
 import DOM from '../../util/dom';
 import {extend, bindAll} from '../../util/util';
-import {MouseRotateHandler, MousePitchHandler} from '../handler/mouse';
 
 import type Map from '../map';
 import type {IControl} from './control';
@@ -149,20 +148,15 @@ class MouseRotateWrapper {
     map: Map;
     _clickTolerance: number;
     element: HTMLElement;
-    mouseRotate: MouseRotateHandler;
-    mousePitch: MousePitchHandler;
     _startPos: Point;
     _lastPos: Point;
 
     constructor(map: Map, element: HTMLElement, pitch: boolean = false) {
         this._clickTolerance = 10;
         this.element = element;
-        this.mouseRotate = new MouseRotateHandler({clickTolerance: map.dragRotate._mouseRotate._clickTolerance});
         this.map = map;
-        if (pitch) this.mousePitch = new MousePitchHandler({clickTolerance: map.dragRotate._mousePitch._clickTolerance});
 
-        bindAll(['mousedown', 'mousemove', 'mouseup', 'touchstart', 'touchmove', 'touchend', 'reset'], this);
-        DOM.addEventListener(element, 'mousedown', this.mousedown);
+        bindAll(['touchstart', 'touchmove', 'touchend', 'reset'], this);
         DOM.addEventListener(element, 'touchstart', this.touchstart, {passive: false});
         DOM.addEventListener(element, 'touchmove', this.touchmove);
         DOM.addEventListener(element, 'touchend', this.touchend);
@@ -170,19 +164,10 @@ class MouseRotateWrapper {
     }
 
     down(e: MouseEvent, point: Point) {
-        this.mouseRotate.mousedown(e, point);
-        if (this.mousePitch) this.mousePitch.mousedown(e, point);
         DOM.disableDrag();
     }
 
     move(e: MouseEvent, point: Point) {
-        const map = this.map;
-        const r = this.mouseRotate.mousemoveWindow(e, point) as any;
-        if (r && r.bearingDelta) map.setBearing(map.getBearing() + r.bearingDelta);
-        if (this.mousePitch) {
-            const p = this.mousePitch.mousemoveWindow(e, point) as any;
-            if (p && p.pitchDelta) map.setPitch(map.getPitch() + p.pitchDelta);
-        }
     }
 
     off() {
@@ -212,8 +197,6 @@ class MouseRotateWrapper {
     }
 
     mouseup(e: MouseEvent) {
-        this.mouseRotate.mouseupWindow(e);
-        if (this.mousePitch) this.mousePitch.mouseupWindow(e);
         this.offTemp();
     }
 
@@ -246,8 +229,6 @@ class MouseRotateWrapper {
     }
 
     reset() {
-        this.mouseRotate.reset();
-        if (this.mousePitch) this.mousePitch.reset();
         delete this._startPos;
         delete this._lastPos;
         this.offTemp();

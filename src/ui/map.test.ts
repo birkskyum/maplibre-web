@@ -61,8 +61,6 @@ describe('Map', () => {
         expect(map.getStyle()).toBeUndefined();
         expect(map.boxZoom.isEnabled()).toBeTruthy();
         expect(map.doubleClickZoom.isEnabled()).toBeTruthy();
-        expect(map.dragPan.isEnabled()).toBeTruthy();
-        expect(map.dragRotate.isEnabled()).toBeTruthy();
         expect(map.keyboard.isEnabled()).toBeTruthy();
         expect(() => {
             new Map({
@@ -115,15 +113,11 @@ describe('Map', () => {
 
             expect(map.boxZoom.isEnabled()).toBeFalsy();
             expect(map.doubleClickZoom.isEnabled()).toBeFalsy();
-            expect(map.dragPan.isEnabled()).toBeFalsy();
-            expect(map.dragRotate.isEnabled()).toBeFalsy();
             expect(map.keyboard.isEnabled()).toBeFalsy();
         });
 
         const handlerNames = [
             'boxZoom',
-            'dragRotate',
-            'dragPan',
             'keyboard',
             'doubleClickZoom',
         ];
@@ -1960,36 +1954,6 @@ describe('Map', () => {
                 }
             });
         });
-    });
-
-    test('stops camera animation on mousedown when interactive', () => {
-        const map = createMap({interactive: true});
-        map.flyTo({center: [200, 0], duration: 100});
-
-        simulate.mousedown(map.getCanvasContainer());
-        expect(map.isEasing()).toBe(false);
-
-        map.remove();
-    });
-
-    test('continues camera animation on mousedown when non-interactive', () => {
-        const map = createMap({interactive: false});
-        map.flyTo({center: [200, 0], duration: 100});
-
-        simulate.mousedown(map.getCanvasContainer());
-        expect(map.isEasing()).toBe(true);
-
-        map.remove();
-    });
-
-    test('stops camera animation on touchstart when interactive', () => {
-        const map = createMap({interactive: true});
-        map.flyTo({center: [200, 0], duration: 100});
-
-        simulate.touchstart(map.getCanvasContainer(), {touches: [{target: map.getCanvas(), clientX: 0, clientY: 0}]});
-        expect(map.isEasing()).toBe(false);
-
-        map.remove();
     });
 
     test('continues camera animation on touchstart when non-interactive', () => {
