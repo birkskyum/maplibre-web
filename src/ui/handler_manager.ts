@@ -2,8 +2,6 @@ import {Event} from '../util/evented';
 import DOM from '../util/dom';
 import Map, {CompleteMapOptions} from './map';
 import {MapEventHandler, BlockableMapEventHandler} from './handler/map_event';
-import BoxZoomHandler from './handler/box_zoom';
-import KeyboardHandler from './handler/keyboard';
 import {bindAll, extend} from '../util/util';
 import Point from '@mapbox/point-geometry';
 import LngLat from '../geo/lng_lat';
@@ -166,17 +164,7 @@ class HandlerManager {
     _addDefaultHandlers(options: CompleteMapOptions) {
         const map = this._map;
         this._add('mapEvent', new MapEventHandler(map, options));
-
-        const boxZoom = map.boxZoom = new BoxZoomHandler(map, options);
-        this._add('boxZoom', boxZoom);
-
         this._add('blockableMapEvent', new BlockableMapEventHandler(map));
-
-        for (const name of ['boxZoom',]) {
-            if (options.interactive && options[name]) {
-                map[name].enable(options[name]);
-            }
-        }
     }
 
     _add(handlerName: string, handler: Handler, allowed?: Array<string>) {

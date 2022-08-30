@@ -34,7 +34,6 @@ import type {MapEvent, MapDataEvent} from './events';
 import type {CustomLayerInterface} from '../style/style_layer/custom_style_layer';
 import type {StyleImageInterface, StyleImageMetadata} from '../style/style_image';
 import type {PointLike} from './camera';
-import type BoxZoomHandler from './handler/box_zoom';
 
 import defaultLocale from './default_locale';
 import type {TaskID} from '../util/task_queue';
@@ -298,12 +297,6 @@ class Map extends Camera {
     _removed: boolean;
     _clickTolerance: number;
     _pixelRatio: number;
-
-    /**
-     * The map's {@link BoxZoomHandler}, which implements zooming using a drag gesture with the Shift key pressed.
-     * Find more details and examples using `boxZoom` in the {@link BoxZoomHandler} section.
-     */
-    boxZoom: BoxZoomHandler;
 
     constructor(options: MapOptions) {
         PerformanceUtils.mark(PerformanceMarkers.create);

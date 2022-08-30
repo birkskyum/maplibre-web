@@ -59,7 +59,6 @@ describe('Map', () => {
         const map = createMap({interactive: true, style: null});
         expect(map.getContainer()).toBeTruthy();
         expect(map.getStyle()).toBeUndefined();
-        expect(map.boxZoom.isEnabled()).toBeTruthy();
         expect(() => {
             new Map({
                 container: 'anElementIdWhichDoesNotExistInTheDocument'
@@ -103,29 +102,6 @@ describe('Map', () => {
         const padded = map({padding: 100});
 
         expect(unpadded.getZoom() > padded.getZoom()).toBeTruthy();
-    });
-
-    describe('disables handlers', () => {
-        test('disables all handlers', () => {
-            const map = createMap({interactive: false});
-
-            expect(map.boxZoom.isEnabled()).toBeFalsy();
-        });
-
-        const handlerNames = [
-            'boxZoom',
-        ];
-        handlerNames.forEach((handlerName) => {
-            test(`disables "${handlerName}" handler`, () => {
-                const options = {};
-                options[handlerName] = false;
-                const map = createMap(options);
-
-                expect(map[handlerName].isEnabled()).toBeFalsy();
-
-            });
-        });
-
     });
 
     test('emits load event after a style is set', done => {
