@@ -8,7 +8,6 @@ import Style from '../style/style';
 import EvaluationParameters from '../style/evaluation_parameters';
 import Painter from '../render/painter';
 import Transform from '../geo/transform';
-import Hash from './hash';
 import HandlerManager from './handler_manager';
 import Camera, {CameraOptions} from './camera';
 import LngLat from '../geo/lng_lat';
@@ -60,7 +59,6 @@ const version = packageJSON.version;
 
 /* eslint-enable no-use-before-define */
 export type MapOptions = {
-    hash?: boolean | string;
     interactive?: boolean;
     container: HTMLElement | string;
     bearingSnap?: number;
@@ -152,7 +150,6 @@ const defaultOptions = {
     clickTolerance: 3,
     pitchWithRotate: true,
 
-    hash: false,
     attributionControl: true,
     maplibreLogo: false,
 
@@ -189,11 +186,6 @@ const defaultOptions = {
  * such JSON.
  *
  *
- * @param {(boolean|string)} [options.hash=false] If `true`, the map's position (zoom, center latitude, center longitude, bearing, and pitch) will be synced with the hash fragment of the page's URL.
- *   For example, `http://path/to/my/page.html#2.59/39.26/53.07/-24.1/60`.
- *   An additional string may optionally be provided to indicate a parameter-styled hash,
- *   e.g. http://path/to/my/page.html#map=2.59/39.26/53.07/-24.1/60&foo=bar, where foo
- *   is a custom parameter and bar is an arbitrary hash distinct from the map hash.
  * @param {boolean} [options.interactive=true] If `false`, no mouse, touch, or keyboard listeners will be attached to the map, so it will not respond to interaction.
  * @param {number} [options.bearingSnap=7] The threshold, measured in degrees, that determines when the map's
  *   bearing will snap to north. For example, with a `bearingSnap` of 7, if the user rotates
@@ -302,7 +294,6 @@ class Map extends Camera {
     _failIfMajorPerformanceCaveat: boolean;
     _antialias: boolean;
     _refreshExpiredTiles: boolean;
-    _hash: Hash;
     _delegatedListeners: any;
     _fadeDuration: number;
     _crossSourceCollisions: boolean;
@@ -444,21 +435,16 @@ class Map extends Camera {
             this._setupCooperativeGestures();
         }
 
-        const hashName = (typeof options.hash === 'string' && options.hash) || undefined;
-        this._hash = options.hash && (new Hash(hashName)).addTo(this);
-        // don't set position from options if set through hash
-        if (!this._hash || !this._hash._onHashChange()) {
-            this.jumpTo({
-                center: options.center,
-                zoom: options.zoom,
-                bearing: options.bearing,
-                pitch: options.pitch
-            });
+        this.jumpTo({
+            center: options.center,
+            zoom: options.zoom,
+            bearing: options.bearing,
+            pitch: options.pitch
+        });
 
-            if (options.bounds) {
-                this.resize();
-                this.fitBounds(options.bounds, extend({}, options.fitBoundsOptions, {duration: 0}));
-            }
+        if (options.bounds) {
+            this.resize();
+            this.fitBounds(options.bounds, extend({}, options.fitBoundsOptions, {duration: 0}));
         }
 
         this.resize();
@@ -2736,7 +2722,6 @@ class Map extends Camera {
      * methods on the map.
      */
     remove() {
-        if (this._hash) this._hash.remove();
 
         for (const control of this._controls) control.onRemove(this);
         this._controls = [];
