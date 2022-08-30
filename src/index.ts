@@ -1,7 +1,6 @@
 import {supported} from '@mapbox/mapbox-gl-supported';
 import packageJSON from '../package.json' assert {type: 'json'};
 import Map from './ui/map';
-import NavigationControl from './ui/control/navigation_control';
 import AttributionControl from './ui/control/attribution_control';
 import LogoControl from './ui/control/logo_control';
 import ScaleControl from './ui/control/scale_control';
@@ -39,7 +38,6 @@ const exported = {
     setRTLTextPlugin,
     getRTLTextPluginStatus,
     Map,
-    NavigationControl,
     AttributionControl,
     LogoControl,
     ScaleControl,
