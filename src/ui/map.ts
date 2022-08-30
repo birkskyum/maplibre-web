@@ -36,7 +36,6 @@ import type {CustomLayerInterface} from '../style/style_layer/custom_style_layer
 import type {StyleImageInterface, StyleImageMetadata} from '../style/style_image';
 import type {PointLike} from './camera';
 import type BoxZoomHandler from './handler/box_zoom';
-import type {TouchPitchHandler} from './handler/touch_zoom_rotate';
 import type DragRotateHandler from './handler/shim/drag_rotate';
 import DragPanHandler, {DragPanOptions} from './handler/shim/drag_pan';
 
@@ -75,7 +74,6 @@ export type MapOptions = {
     antialias?: boolean;
     refreshExpiredTiles?: boolean;
     maxBounds?: LngLatBoundsLike;
-    scrollZoom?: boolean;
     minZoom?: number | null;
     maxZoom?: number | null;
     minPitch?: number | null;
@@ -85,8 +83,6 @@ export type MapOptions = {
     dragPan?: DragPanOptions | boolean;
     keyboard?: boolean;
     doubleClickZoom?: boolean;
-    touchZoomRotate?: boolean;
-    touchPitch?: boolean;
     cooperativeGestures?: boolean | GestureOptions;
     trackResize?: boolean;
     center?: LngLatLike;
@@ -146,14 +142,11 @@ const defaultOptions = {
     maxPitch: defaultMaxPitch,
 
     interactive: true,
-    scrollZoom: true,
     boxZoom: true,
     dragRotate: true,
     dragPan: true,
     keyboard: true,
     doubleClickZoom: true,
-    touchZoomRotate: true,
-    touchPitch: true,
     cooperativeGestures: undefined,
 
     bearingSnap: 7,
@@ -362,12 +355,6 @@ class Map extends Camera {
      * Find more details and examples using `touchZoomRotate` in the {@link TouchZoomRotateHandler} section.
      */
     touchZoomRotate: TouchZoomRotateHandler;
-
-    /**
-     * The map's {@link TouchPitchHandler}, which allows the user to pitch the map with touch gestures.
-     * Find more details and examples using `touchPitch` in the {@link TouchPitchHandler} section.
-     */
-    touchPitch: TouchPitchHandler;
 
     constructor(options: MapOptions) {
         PerformanceUtils.mark(PerformanceMarkers.create);

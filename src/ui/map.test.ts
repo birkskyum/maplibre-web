@@ -64,7 +64,6 @@ describe('Map', () => {
         expect(map.dragPan.isEnabled()).toBeTruthy();
         expect(map.dragRotate.isEnabled()).toBeTruthy();
         expect(map.keyboard.isEnabled()).toBeTruthy();
-        expect(map.touchZoomRotate.isEnabled()).toBeTruthy();
         expect(() => {
             new Map({
                 container: 'anElementIdWhichDoesNotExistInTheDocument'
@@ -119,7 +118,6 @@ describe('Map', () => {
             expect(map.dragPan.isEnabled()).toBeFalsy();
             expect(map.dragRotate.isEnabled()).toBeFalsy();
             expect(map.keyboard.isEnabled()).toBeFalsy();
-            expect(map.touchZoomRotate.isEnabled()).toBeFalsy();
         });
 
         const handlerNames = [
@@ -128,7 +126,6 @@ describe('Map', () => {
             'dragPan',
             'keyboard',
             'doubleClickZoom',
-            'touchZoomRotate'
         ];
         handlerNames.forEach((handlerName) => {
             test(`disables "${handlerName}" handler`, () => {

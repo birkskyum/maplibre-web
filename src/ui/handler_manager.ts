@@ -7,7 +7,6 @@ import BoxZoomHandler from './handler/box_zoom';
 import TapZoomHandler from './handler/tap_zoom';
 import {MousePanHandler, MouseRotateHandler, MousePitchHandler} from './handler/mouse';
 import TouchPanHandler from './handler/touch_pan';
-import {TouchZoomHandler, TouchRotateHandler, TouchPitchHandler} from './handler/touch_zoom_rotate';
 import KeyboardHandler from './handler/keyboard';
 import DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
 import ClickZoomHandler from './handler/click_zoom';
@@ -193,9 +192,6 @@ class HandlerManager {
         const tapDragZoom = new TapDragZoomHandler();
         this._add('tapDragZoom', tapDragZoom);
 
-        const touchPitch = map.touchPitch = new TouchPitchHandler(map);
-        this._add('touchPitch', touchPitch);
-
         const mouseRotate = new MouseRotateHandler(options);
         const mousePitch = new MousePitchHandler(options);
         map.dragRotate = new DragRotateHandler(options, mouseRotate, mousePitch);
@@ -208,18 +204,12 @@ class HandlerManager {
         this._add('mousePan', mousePan);
         this._add('touchPan', touchPan, ['touchZoom', 'touchRotate']);
 
-        const touchRotate = new TouchRotateHandler();
-        const touchZoom = new TouchZoomHandler();
-        map.touchZoomRotate = new TouchZoomRotateHandler(el, touchZoom, touchRotate, tapDragZoom);
-        this._add('touchRotate', touchRotate, ['touchPan', 'touchZoom']);
-        this._add('touchZoom', touchZoom, ['touchPan', 'touchRotate']);
-
         const keyboard = map.keyboard = new KeyboardHandler();
         this._add('keyboard', keyboard);
 
         this._add('blockableMapEvent', new BlockableMapEventHandler(map));
 
-        for (const name of ['boxZoom', 'doubleClickZoom', 'tapDragZoom', 'touchPitch', 'dragRotate', 'dragPan', 'touchZoomRotate', 'keyboard']) {
+        for (const name of ['boxZoom', 'doubleClickZoom', 'tapDragZoom', 'dragRotate', 'dragPan', 'keyboard']) {
             if (options.interactive && options[name]) {
                 map[name].enable(options[name]);
             }
