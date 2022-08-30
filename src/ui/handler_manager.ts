@@ -9,7 +9,6 @@ import TouchPanHandler from './handler/touch_pan';
 import KeyboardHandler from './handler/keyboard';
 import DoubleClickZoomHandler from './handler/shim/dblclick_zoom';
 import ClickZoomHandler from './handler/click_zoom';
-import TapDragZoomHandler from './handler/tap_drag_zoom';
 import DragPanHandler from './handler/shim/drag_pan';
 import DragRotateHandler from './handler/shim/drag_rotate';
 import {bindAll, extend} from '../util/util';
@@ -184,9 +183,6 @@ class HandlerManager {
         map.doubleClickZoom = new DoubleClickZoomHandler(clickZoom, tapZoom);
         this._add('tapZoom', tapZoom);
         this._add('clickZoom', clickZoom);
-
-        const tapDragZoom = new TapDragZoomHandler();
-        this._add('tapDragZoom', tapDragZoom);
 
         const mouseRotate = new MouseRotateHandler(options);
         const mousePitch = new MousePitchHandler(options);
