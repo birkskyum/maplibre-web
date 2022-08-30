@@ -133,7 +133,7 @@ describe('query tests', () => {
     beforeAll(async () => {
 
         browser = await chromium.launch({
-            headless: false,
+            headless: true,
         });
     });
 
