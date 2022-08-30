@@ -215,15 +215,12 @@ class HandlerManager {
         this._add('touchRotate', touchRotate, ['touchPan', 'touchZoom']);
         this._add('touchZoom', touchZoom, ['touchPan', 'touchRotate']);
 
-        const scrollZoom = map.scrollZoom = new ScrollZoomHandler(map, this);
-        this._add('scrollZoom', scrollZoom, ['mousePan']);
-
         const keyboard = map.keyboard = new KeyboardHandler();
         this._add('keyboard', keyboard);
 
         this._add('blockableMapEvent', new BlockableMapEventHandler(map));
 
-        for (const name of ['boxZoom', 'doubleClickZoom', 'tapDragZoom', 'touchPitch', 'dragRotate', 'dragPan', 'touchZoomRotate', 'scrollZoom', 'keyboard']) {
+        for (const name of ['boxZoom', 'doubleClickZoom', 'tapDragZoom', 'touchPitch', 'dragRotate', 'dragPan', 'touchZoomRotate', 'keyboard']) {
             if (options.interactive && options[name]) {
                 map[name].enable(options[name]);
             }
@@ -255,7 +252,7 @@ class HandlerManager {
     }
 
     isZooming() {
-        return !!this._eventsInProgress.zoom || this._map.scrollZoom.isZooming();
+        return !!this._eventsInProgress.zoom;
     }
     isRotating() {
         return !!this._eventsInProgress.rotate;

@@ -64,7 +64,6 @@ describe('Map', () => {
         expect(map.dragPan.isEnabled()).toBeTruthy();
         expect(map.dragRotate.isEnabled()).toBeTruthy();
         expect(map.keyboard.isEnabled()).toBeTruthy();
-        expect(map.scrollZoom.isEnabled()).toBeTruthy();
         expect(map.touchZoomRotate.isEnabled()).toBeTruthy();
         expect(() => {
             new Map({
@@ -120,12 +119,10 @@ describe('Map', () => {
             expect(map.dragPan.isEnabled()).toBeFalsy();
             expect(map.dragRotate.isEnabled()).toBeFalsy();
             expect(map.keyboard.isEnabled()).toBeFalsy();
-            expect(map.scrollZoom.isEnabled()).toBeFalsy();
             expect(map.touchZoomRotate.isEnabled()).toBeFalsy();
         });
 
         const handlerNames = [
-            'scrollZoom',
             'boxZoom',
             'dragRotate',
             'dragPan',

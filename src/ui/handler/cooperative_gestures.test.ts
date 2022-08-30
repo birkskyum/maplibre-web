@@ -47,33 +47,6 @@ describe('CoopGesturesHandler', () => {
         map.remove();
     });
 
-    test('Zooms on wheel if control key is down', () => {
-        // NOTE: This should pass regardless of whether cooperativeGestures is enabled or not
-        const browserNow = jest.spyOn(browser, 'now');
-        let now = 1555555555555;
-        browserNow.mockReturnValue(now);
-
-        const map = createMap();
-        map._renderTaskQueue.run();
-
-        simulate.keydown(document, {type: 'keydown', key: 'Control'});
-        map._renderTaskQueue.run();
-
-        const startZoom = map.getZoom();
-        // simulate a single 'wheel' event
-        simulate.wheel(map.getCanvas(), {type: 'wheel', deltaY: -simulate.magicWheelZoomDelta});
-        map._renderTaskQueue.run();
-
-        now += 400;
-        browserNow.mockReturnValue(now);
-        map._renderTaskQueue.run();
-
-        const endZoom = map.getZoom();
-        expect(endZoom - startZoom).toBeCloseTo(0.0285, 3);
-
-        map.remove();
-    });
-
     test('Does not pan on touchmove with a single touch', () => {
         const map = createMap();
         const target = map.getCanvas();

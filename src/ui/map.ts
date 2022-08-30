@@ -35,7 +35,6 @@ import type {MapEvent, MapDataEvent} from './events';
 import type {CustomLayerInterface} from '../style/style_layer/custom_style_layer';
 import type {StyleImageInterface, StyleImageMetadata} from '../style/style_image';
 import type {PointLike} from './camera';
-import type ScrollZoomHandler from './handler/scroll_zoom';
 import type BoxZoomHandler from './handler/box_zoom';
 import type {TouchPitchHandler} from './handler/touch_zoom_rotate';
 import type DragRotateHandler from './handler/shim/drag_rotate';
@@ -326,12 +325,6 @@ class Map extends Camera {
     _removed: boolean;
     _clickTolerance: number;
     _pixelRatio: number;
-
-    /**
-     * The map's {@link ScrollZoomHandler}, which implements zooming in and out with a scroll wheel or trackpad.
-     * Find more details and examples using `scrollZoom` in the {@link ScrollZoomHandler} section.
-     */
-    scrollZoom: ScrollZoomHandler;
 
     /**
      * The map's {@link BoxZoomHandler}, which implements zooming using a drag gesture with the Shift key pressed.
