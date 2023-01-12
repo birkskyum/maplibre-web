@@ -1,10 +1,10 @@
-# maplibre-gl
-
-## Table of contents
-
-### Variables
-
-- [default](../wiki/Exports#default)
+---
+id: "modules"
+title: "maplibre-gl"
+sidebar_label: "Exports"
+sidebar_position: 0.5
+custom_edit_url: null
+---
 
 ## Variables
 
