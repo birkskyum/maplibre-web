@@ -126,6 +126,7 @@
     "stylelint-config-standard": "^30.0.1",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
     "typescript": "^4.9.5"
   },
   "overrides": {
@@ -139,7 +140,7 @@
   "scripts": {
     "generate-dist-package": "ts-node build/generate-dist-package",
     "generate-shaders": "ts-node build/generate-shaders.ts",
-    "generate-struct-arrays": "ts-node build/generate-struct-arrays.ts",
+    "generate-struct-arrays": "ts-node -r tsconfig-paths/register build/generate-struct-arrays.ts",
     "generate-style-code": "ts-node build/generate-style-code.ts",
     "generate-style-spec": "ts-node build/generate-style-spec.ts",
     "generate-typings": "ts-node build/generate-typings.ts",

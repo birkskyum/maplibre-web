@@ -1,6 +1,7 @@
 
 import validateStyleMin from './validate_style.min';
-import {v8, ValidationError} from './style-spec';
+import ValidationError from './error/validation_error';
+import v8 from './reference/v8.json' assert {type: 'json'};
 import readStyle from './read_style';
 import type {StyleSpecification} from './types.g';
 

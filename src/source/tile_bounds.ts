@@ -1,7 +1,6 @@
+import {ICanonicalTileID} from '@maplibre/maplibre-gl-style-spec';
 import LngLatBounds, {LngLatBoundsLike} from '../geo/lng_lat_bounds';
 import {mercatorXfromLng, mercatorYfromLat} from '../geo/mercator_coordinate';
-
-import type {CanonicalTileID} from './tile_id';
 
 class TileBounds {
     bounds: LngLatBounds;
@@ -20,7 +19,7 @@ class TileBounds {
         return [Math.max(-180, bounds[0]), Math.max(-90, bounds[1]), Math.min(180, bounds[2]), Math.min(90, bounds[3])];
     }
 
-    contains(tileID: CanonicalTileID) {
+    contains(tileID: ICanonicalTileID) {
         const worldSize = Math.pow(2, tileID.z);
         const level = {
             minX: Math.floor(mercatorXfromLng(this.bounds.getWest()) * worldSize),

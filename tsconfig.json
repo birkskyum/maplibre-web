@@ -3,7 +3,7 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "checkJs": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
     "esModuleInterop": true,
     "importHelpers": false,
@@ -13,38 +13,20 @@
     "resolveJsonModule": true,
     "skipLibCheck": false,
     "sourceMap": true,
+    "baseUrl": ".",
     "strict": false,
     "target": "ES2019",
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "types": [
-      "node",
-      "jest",
-      "geojson",
-      "offscreencanvas"
-    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["node", "jest", "geojson", "offscreencanvas"],
     "paths": {
-      "@maplibre/maplibre-gl-style-spec": [
-        "./src/style-spec/style-spec.ts"
-    ]
+      "@maplibre/maplibre-gl-style-spec": ["./src/style-spec/style-spec.ts"]
     }
   },
   "ts-node": {
     "experimentalSpecifierResolution": "node",
-    "esm": true
+    "esm": true,
+    "require": ["tsconfig-paths/register"]
   },
-  "include": [
-    "rollup.config.*",
-    "src/**/*",
-    "test/bench/**/*",
-    "build/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "test/bench/**/*generated*",
-  ]
+  "include": ["rollup.config.*", "src/**/*", "test/bench/**/*", "build/**/*"],
+  "exclude": ["node_modules", "dist", "test/bench/**/*generated*"]
 }

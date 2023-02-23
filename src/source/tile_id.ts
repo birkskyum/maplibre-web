@@ -4,8 +4,9 @@ import Point from '@mapbox/point-geometry';
 import MercatorCoordinate from '../geo/mercator_coordinate';
 import {register} from '../util/web_worker_transfer';
 import {mat4} from 'gl-matrix';
+import {ICanonicalTileID, IMercatorCoordinate} from '@maplibre/maplibre-gl-style-spec';
 
-export class CanonicalTileID {
+export class CanonicalTileID implements ICanonicalTileID {
     z: number;
     x: number;
     y: number;
@@ -23,7 +24,7 @@ export class CanonicalTileID {
         this.key = calculateKey(0, z, z, x, y);
     }
 
-    equals(id: CanonicalTileID) {
+    equals(id: ICanonicalTileID) {
         return this.z === id.z && this.x === id.x && this.y === id.y;
     }
 
@@ -42,12 +43,12 @@ export class CanonicalTileID {
             .replace(/{bbox-epsg-3857}/g, bbox);
     }
 
-    isChildOf(parent: CanonicalTileID) {
+    isChildOf(parent: ICanonicalTileID) {
         const dz = this.z - parent.z;
         return  dz > 0 && parent.x === (this.x >> dz) && parent.y === (this.y >> dz);
     }
 
-    getTilePoint(coord: MercatorCoordinate) {
+    getTilePoint(coord: IMercatorCoordinate) {
         const tilesAtZoom = Math.pow(2, this.z);
         return new Point(
             (coord.x * tilesAtZoom - this.x) * EXTENT,
@@ -61,10 +62,10 @@ export class CanonicalTileID {
 
 export class UnwrappedTileID {
     wrap: number;
-    canonical: CanonicalTileID;
+    canonical: ICanonicalTileID;
     key: string;
 
-    constructor(wrap: number, canonical: CanonicalTileID) {
+    constructor(wrap: number, canonical: ICanonicalTileID) {
         this.wrap = wrap;
         this.canonical = canonical;
         this.key = calculateKey(wrap, canonical.z, canonical.z, canonical.x, canonical.y);
@@ -74,7 +75,7 @@ export class UnwrappedTileID {
 export class OverscaledTileID {
     overscaledZ: number;
     wrap: number;
-    canonical: CanonicalTileID;
+    canonical: ICanonicalTileID;
     key: string;
     posMatrix: mat4;
 

@@ -66,34 +66,53 @@ export type StylePropertySpecification = {
 import v8Spec from './reference/v8.json' assert {type: 'json'};
 const v8 = v8Spec as any;
 import latest from './reference/latest';
-import format from './format';
-import migrate from './migrate';
 import derefLayers from './deref';
-import diff from './diff';
+import diff, {operations} from './diff';
 import ValidationError from './error/validation_error';
 import ParsingError from './error/parsing_error';
-import {StyleExpression, isExpression, createExpression, createPropertyExpression, normalizePropertyExpression, ZoomConstantExpression, ZoomDependentExpression, StylePropertyFunction} from './expression';
-import featureFilter, {isExpressionFilter} from './feature_filter';
+import {FeatureState, StyleExpression, isExpression, createExpression, createPropertyExpression, normalizePropertyExpression, ZoomConstantExpression, ZoomDependentExpression, StylePropertyFunction, Feature, GlobalProperties, SourceExpression, CompositeExpression, StylePropertyExpression} from './expression';
+import featureFilter, {FeatureFilter, isExpressionFilter} from './feature_filter';
 
 import convertFilter from './feature_filter/convert';
 import Color from './util/color';
 import Padding from './util/padding';
+import Formatted, {FormattedSection} from './expression/types/formatted';
 import {createFunction, isFunction} from './function';
 import convertFunction from './function/convert';
 import {eachSource, eachLayer, eachProperty} from './visit';
+import ResolvedImage from './expression/types/resolved_image';
+import {supportsPropertyExpression} from './util/properties';
+import {IMercatorCoordinate, ICanonicalTileID, ILngLat, ILngLatLike} from './tiles_and_coordinates';
+import EvaluationContext from './expression/evaluation_context';
+import {FormattedType, NullType, Type, toString, ColorType} from './expression/types';
 
+import interpolates, {interpolateFactory} from './util/interpolate';
+import expressions from './expression/definitions';
+import Interpolate from './expression/definitions/interpolate';
+import type {InterpolationType} from './expression/definitions/interpolate';
 import validate from './validate_style';
+import groupByLayout from './group_by_layout';
+import emptyStyle from './empty';
+import validateStyleMin from './validate_style.min';
+import Step from './expression/definitions/step';
+import {typeOf} from './expression/values';
+import FormatExpression from './expression/definitions/format';
+import Literal from './expression/definitions/literal';
+import CompoundExpression from './expression/compound_expression';
+import { FillLayerSpecification, FilterSpecification, GeoJSONSourceSpecification, ImageSourceSpecification, LayerSpecification, LightSpecification, PromoteIdSpecification, PropertyValueSpecification, RasterDEMSourceSpecification, RasterSourceSpecification, SourceSpecification, SpriteSpecification, StyleSpecification, SymbolLayerSpecification, TerrainSpecification, TransitionSpecification, VectorSourceSpecification, VideoSourceSpecification } from './types.g';
+import deepEqual from './util/deep_equal';
+import { Expression } from './expression/expression';
 
 const expression = {
     StyleExpression,
-    isExpression,
-    isExpressionFilter,
-    createExpression,
-    createPropertyExpression,
-    normalizePropertyExpression,
+    StylePropertyFunction,
     ZoomConstantExpression,
     ZoomDependentExpression,
-    StylePropertyFunction
+    createExpression,
+    createPropertyExpression,
+    isExpression,
+    isExpressionFilter,
+    normalizePropertyExpression,
 };
 
 const styleFunction = {
@@ -102,23 +121,87 @@ const styleFunction = {
     isFunction
 };
 
-const visit = {eachSource, eachLayer, eachProperty};
+const visit = {eachLayer, eachProperty, eachSource};
 
 export {
-    v8,
-    latest,
-    format,
-    migrate,
-    derefLayers,
-    diff,
+    Interpolate,
+    InterpolationType,
     ValidationError,
     ParsingError,
-    expression,
-    featureFilter,
-    convertFilter,
+    FeatureState,
     Color,
+    Step,
+    CompoundExpression,
     Padding,
-    styleFunction as function,
+    Formatted,
+    ResolvedImage,
+    Feature,
+    EvaluationContext,
+    GlobalProperties,
+    SourceExpression,
+    CompositeExpression,
+    FormattedSection,
+    IMercatorCoordinate,
+    ICanonicalTileID,
+    ILngLat,
+    ILngLatLike,
+    Expression,
+    StyleExpression,
+    ZoomConstantExpression,
+    Literal,
+    Type,
+    FilterSpecification,
+    LightSpecification,
+    SourceSpecification,
+    TerrainSpecification,
+    StylePropertyFunction,
+    StylePropertyExpression,
+    ZoomDependentExpression,
+    FormatExpression,
+    StyleSpecification,
+    FeatureFilter,
+    GeoJSONSourceSpecification,
+    VectorSourceSpecification,
+    TransitionSpecification,
+    PropertyValueSpecification,
+    latest,
+    PromoteIdSpecification,
+    VideoSourceSpecification,
+    RasterSourceSpecification,
+    SymbolLayerSpecification,
+    FillLayerSpecification,
+    RasterDEMSourceSpecification,
+    SpriteSpecification,
     validate,
-    visit
+    ImageSourceSpecification,
+
+    interpolateFactory,
+    validateStyleMin,
+    groupByLayout,
+    emptyStyle,
+    derefLayers,
+    normalizePropertyExpression,
+    isExpression,
+    diff,
+    supportsPropertyExpression,
+    convertFunction,
+    createExpression,
+    isFunction, createFunction,
+    createPropertyExpression,
+    convertFilter,
+    featureFilter,
+    typeOf,
+    LayerSpecification,
+    toString,
+    deepEqual,
+    ColorType,
+    interpolates,
+    v8,
+    NullType,
+    styleFunction as function,
+    visit,
+    operations,
+    expressions,
+    expression,
+    FormattedType,
 };
