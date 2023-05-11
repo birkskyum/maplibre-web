@@ -64,6 +64,7 @@ import type {ControlPosition, IControl} from './control/control';
 import type {MapGeoJSONFeature} from '../util/vectortile_to_geojson';
 import Terrain from '../render/terrain';
 import RenderToTexture from '../render/render_to_texture';
+import {isWebGL2} from '../gl/webgl2';
 
 const version = packageJSON.version;
 /* eslint-enable no-use-before-define */
@@ -2844,6 +2845,7 @@ class Map extends Camera {
      * @private
      */
     _render(paintStartTimeStamp: number) {
+        const fadeDuration = this._idleTriggered ? this._fadeDuration : 0;
         // A custom layer may have used the context asynchronously. Mark the state as dirty.
         this.painter.context.setDirty();
         this.painter.setBaseState();
