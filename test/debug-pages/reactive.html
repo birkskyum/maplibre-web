@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MapLibre GL JS debug page</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='../../dist/maplibre-gl.css' />
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body, #map { height: 100%; }
+
+        #checkboxes {
+            position: absolute;
+            background: #fff;
+            top:0;
+            left:0;
+            padding:10px;
+        }
+
+        .wrapper {
+            display: flex;
+            height: 100%;
+        }
+
+        .wrapper > div {
+            height: 100%;
+            width: 100%;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrapper">
+    <div id='map1'></div>
+    <div id='map2'></div>
+</div>
+<div id='checkboxes'>
+    <label><input id='show-tile-boundaries-checkbox' type='checkbox'> tile debug</label><br />
+    <label><input id='show-symbol-collision-boxes-checkbox' type='checkbox'> collision debug</label><br />
+    <label><input id='show-overdraw-checkbox' type='checkbox'> overdraw debug</label><br />
+    <label><input id='pitch-checkbox' type='checkbox' checked> pitch with rotate</label><br />
+</div>
+
+<script src='../../dist/maplibre-gl-dev.js'></script>
+<script>
+
+var map1 = window.map = new maplibregl.Map({
+    container: 'map1',
+    zoom: 12.56,
+    pitch: 30,
+    maxPitch: 85,
+    center: [6.55661, 61.282],
+    style: {
+        version: 8,
+        sources: {
+            osm: {
+                type: 'raster',
+                tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                tileSize: 256,
+                attribution: '&copy; OpenStreetMap Contributors',
+                maxzoom: 19
+            },
+            // Use a different source for terrain and hillshade layers, to improve
+            // render quality
+            terrainSource: {
+                type: 'raster-dem',
+                tiles: [
+                    'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+                ],
+                encoding: 'terrarium',
+                tileSize: 256,
+                maxzoom: 15,
+            },
+            // hillshadeSource: {
+            // type: 'raster-dem',
+            // url: 'https://demotiles.maplibre.org/terrain-tiles/tiles.json',
+            // tileSize: 256
+            // }
+        },
+        layers:
+            [
+                {id: 'osm', type: 'raster', source: 'osm'},
+                // {
+                // id: 'hills',
+                // type: 'hillshade',
+                // source: 'hillshadeSource',
+                // layout: {visibility: 'visible'},
+                // paint: {'hillshade-shadow-color': '#473B24'}
+                // }
+            ],
+        terrain: {source: 'terrainSource', exaggeration: 1}
+    },
+    hash: true,
+});
+
+map1.addControl(new maplibregl.NavigationControl());
+
+map1.addControl(new maplibregl.ScaleControl());
+
+map1.addControl(
+    new maplibregl.TerrainControl({
+        source: 'terrainSource',
+        exaggeration: 1,
+    })
+);
+map1.on('load', function() {
+    map1._transformCameraUpdate = ({center, zoom}) => {
+        map2.jumpTo({center, zoom});
+        map2.setBearing(map1.getBearing());
+        map2.setPitch(map1.getPitch());
+
+        return {};
+    };
+
+    map1.addSource('geojson', {
+        'type': 'geojson',
+        'data': '../integration/assets/data/linestring.geojson',
+        'attribution': 'GeoJSON Attribution'
+    });
+    map1.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'geojson',
+        'paint': {
+            'line-color': '#EC8D8D',
+            'line-width': {'base': 1.5, 'stops': [[5, 0.75], [18, 32]]}
+        }
+    }, 'country-label-lg');
+
+    map1.addSource('points', {
+        'type': 'geojson',
+        'data': '/test/debug-pages/cross_source_points.geojson'
+    });
+
+    map1.addLayer({
+        'id': 'points',
+        'type': 'symbol',
+        'source': 'points',
+        'layout': {
+            'text-field': '{name}',
+            'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold']
+        }
+    });
+
+    map1.addLayer({
+        id: 'marker',
+        type: 'symbol',
+        source: 'points',
+        layout: {
+            'icon-image': 'bus-11',
+            'icon-size': 2,
+            'icon-ignore-placement': true,
+            'icon-allow-overlap': true
+        }
+    });
+
+    map1.addLayer({
+        id: 'marker-hover',
+        type: 'symbol',
+        filter: ['==', 'name', ''],
+        source: 'points',
+        layout: {
+            'icon-image': 'bus-15',
+            'icon-size': 2,
+            'icon-ignore-placement': true,
+            'icon-allow-overlap': true
+        }
+    });
+
+    map1.on('mouseenter', 'marker', function(e) {
+        map1.setFilter('marker-hover', ['==', 'name', e.features[0].properties.name]);
+    });
+    map1.on('mouseleave', 'marker', function(_) {
+        map1.setFilter('marker-hover', ['==', 'name', '']);
+    });
+
+});
+
+document.getElementById('show-tile-boundaries-checkbox').onclick = function() {
+    map1.showTileBoundaries = !!this.checked;
+    map2.showTileBoundaries = !!this.checked;
+};
+
+document.getElementById('show-symbol-collision-boxes-checkbox').onclick = function() {
+    map1.showCollisionBoxes = !!this.checked;
+    map2.showCollisionBoxes = !!this.checked;
+};
+
+document.getElementById('show-overdraw-checkbox').onclick = function() {
+    map1.showOverdrawInspector = !!this.checked;
+    map2.showOverdrawInspector = !!this.checked;
+};
+
+document.getElementById('pitch-checkbox').onclick = function() {
+    map1.dragRotate._pitchWithRotate = !!this.checked;
+    map2.dragRotate._pitchWithRotate = !!this.checked;
+};
+
+var map2 = (window.map = new maplibregl.Map({
+    container: 'map2',
+    zoom: 12.56,
+    center: [6.55661, 61.282],
+    pitch: 60,
+    hash: true,
+    style: {
+        version: 8,
+        sources: {
+            sat: {
+                type: 'raster',
+                tiles: [
+                    'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+                ],
+                tileSize: 256,
+                maxzoom: 20,
+            },
+            terrainSource: {
+                type: 'raster-dem',
+                tiles: [
+                    'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+                ],
+                encoding: 'terrarium',
+                tileSize: 256,
+                maxzoom: 15,
+            }
+        },
+        layers: [{id: 'sat', type: 'raster', source: 'sat'},],
+        terrain: {
+            source: 'terrainSource',
+            exaggeration: 1,
+        },
+    },
+    maxZoom: 18,
+    maxPitch: 85,
+}));
+
+map2.addControl(
+    new maplibregl.NavigationControl({
+        visualizePitch: true,
+        showZoom: true,
+        showCompass: true,
+    })
+);
+
+map2.addControl(
+    new maplibregl.TerrainControl({
+        source: 'terrainSource',
+        exaggeration: 1,
+    })
+);
+
+const popups = [];
+
+function removeAllPopups() {
+    popups.forEach(popup => {
+        popup.remove(); // Remove the popup from the map
+    });
+
+    popups.length = 0;
+}
+
+map1.on('click', function(e) {
+    if (e.originalEvent.shiftKey) return;
+
+    removeAllPopups();
+
+    const popup1 = new maplibregl.Popup();
+    popup1.setLngLat(map1.unproject(e.point))
+        .setHTML('<h1>Hello World!</h1>')
+        .addTo(map1);
+
+    popups.push(popup1);
+
+    const popup2 = new maplibregl.Popup();
+    popup2.setLngLat(map1.unproject(e.point))
+        .setHTML('<h1>Hello World!</h1>')
+        .addTo(map2);
+
+    popups.push(popup2);
+
+});
+
+map2.on('click', function(e) {
+    if (e.originalEvent.shiftKey) return;
+
+    removeAllPopups();
+
+    const popup1 = new maplibregl.Popup();
+    popup1.setLngLat(map2.unproject(e.point))
+        .setHTML('<h1>Hello World!</h1>')
+        .addTo(map1);
+
+    popups.push(popup1);
+
+    const popup2 = new maplibregl.Popup();
+    popup2.setLngLat(map2.unproject(e.point))
+        .setHTML('<h1>Hello World!</h1>')
+        .addTo(map2);
+
+    popups.push(popup2);
+});
+
+</script>
+</body>
+</html>
