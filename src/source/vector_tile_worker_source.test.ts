@@ -1,3 +1,4 @@
+import {describe, beforeEach, afterEach, test, expect, vi} from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import vt from '@mapbox/vector-tile';
@@ -23,7 +24,7 @@ describe('vector tile worker source', () => {
 
     afterEach(() => {
         server.restore();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
     test('VectorTileWorkerSource#abortTile aborts pending request', async () => {
         const source = new VectorTileWorkerSource(actor, new StyleLayerIndex(), []);
@@ -63,7 +64,7 @@ describe('vector tile worker source', () => {
 
     test('VectorTileWorkerSource#reloadTile reloads a previously-loaded tile', async () => {
         const source = new VectorTileWorkerSource(actor, new StyleLayerIndex(), []);
-        const parse = jest.fn().mockReturnValue(Promise.resolve({} as WorkerTileResult));
+        const parse = vi.fn().mockReturnValue(Promise.resolve({} as WorkerTileResult));
 
         source.loaded = {
             '0': {
@@ -175,7 +176,7 @@ describe('vector tile worker source', () => {
         const source = new VectorTileWorkerSource(actor, layerIndex, []);
         source.loadVectorTile = loadVectorData;
 
-        const parseWorkerTileMock = jest
+        const parseWorkerTileMock = vi
             .spyOn(WorkerTile.prototype, 'parse')
             .mockImplementation(function(_data, _layerIndex, _availableImages, _actor) {
                 this.status = 'parsing';
@@ -206,7 +207,7 @@ describe('vector tile worker source', () => {
 
     test('VectorTileWorkerSource#reloadTile does not reparse tiles with no vectorTile data but does call callback', async () => {
         const source = new VectorTileWorkerSource(actor, new StyleLayerIndex(), []);
-        const parse = jest.fn();
+        const parse = vi.fn();
 
         source.loaded = {
             '0': {
@@ -222,7 +223,7 @@ describe('vector tile worker source', () => {
     test('VectorTileWorkerSource#loadTile returns null for an empty tile', async () => {
         const source = new VectorTileWorkerSource(actor, new StyleLayerIndex(), []);
         source.loadVectorTile = (_params, _abortController) => Promise.resolve(null);
-        const parse = jest.fn();
+        const parse = vi.fn();
 
         server.respondWith(request => {
             request.respond(200, {'Content-Type': 'application/pbf'}, 'something...');
@@ -243,7 +244,7 @@ describe('vector tile worker source', () => {
 
     test('VectorTileWorkerSource#returns a good error message when failing to parse a tile', () => new Promise<void>(done => {
         const source = new VectorTileWorkerSource(actor, new StyleLayerIndex(), []);
-        const parse = jest.fn();
+        const parse = vi.fn();
 
         server.respondWith(request => {
             request.respond(200, {'Content-Type': 'application/pbf'}, 'something...');
@@ -266,7 +267,7 @@ describe('vector tile worker source', () => {
 
     test('VectorTileWorkerSource#returns a good error message when failing to parse a gzipped tile', () => new Promise<void>(done => {
         const source = new VectorTileWorkerSource(actor, new StyleLayerIndex(), []);
-        const parse = jest.fn();
+        const parse = vi.fn();
 
         server.respondWith(new Uint8Array([0x1f, 0x8b]).buffer);
 
@@ -328,7 +329,7 @@ describe('vector tile worker source', () => {
         const source = new VectorTileWorkerSource(actor, layerIndex, []);
         source.loadVectorTile = loadVectorData;
 
-        window.performance.getEntriesByName = jest.fn().mockReturnValue([exampleResourceTiming]);
+        window.performance.getEntriesByName = vi.fn().mockReturnValue([exampleResourceTiming]);
 
         const res = await source.loadTile({
             source: 'source',
@@ -366,12 +367,12 @@ describe('vector tile worker source', () => {
         const sampleMarks = [100, 350];
         const marks = {};
         const measures = {};
-        window.performance.getEntriesByName = jest.fn().mockImplementation(name => (measures[name] || []));
-        window.performance.mark = jest.fn().mockImplementation(name => {
+        window.performance.getEntriesByName = vi.fn().mockImplementation(name => (measures[name] || []));
+        window.performance.mark = vi.fn().mockImplementation(name => {
             marks[name] = sampleMarks.shift();
             return null;
         });
-        window.performance.measure = jest.fn().mockImplementation((name, start, end) => {
+        window.performance.measure = vi.fn().mockImplementation((name, start, end) => {
             measures[name] = measures[name] || [];
             measures[name].push({
                 duration: marks[end] - marks[start],

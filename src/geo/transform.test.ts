@@ -1,3 +1,4 @@
+import {describe, test, expect} from 'vitest';
 import Point from '@mapbox/point-geometry';
 import {MAX_VALID_LATITUDE, Transform} from './transform';
 import {LngLat} from './lng_lat';

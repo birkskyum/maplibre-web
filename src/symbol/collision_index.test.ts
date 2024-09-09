@@ -1,3 +1,4 @@
+import {describe, test, expect} from 'vitest';
 import {CollisionIndex} from './collision_index';
 import {mat4} from 'gl-matrix';
 

@@ -1,3 +1,4 @@
+import {test} from 'vitest';
 import {TerrainSpecification} from '@maplibre/maplibre-gl-style-spec';
 
 import {Painter} from './painter';

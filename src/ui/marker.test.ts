@@ -1,3 +1,4 @@
+import {describe, beforeEach, test, expect, vi} from 'vitest';
 import {createMap as globalCreateMap, beforeMapTest, sleep} from '../util/test/util';
 import {Marker} from './marker';
 import {Popup} from './popup';
@@ -460,9 +461,9 @@ describe('marker', () => {
             .addTo(map);
         const el = marker.getElement();
 
-        const dragstart = jest.fn();
-        const drag      = jest.fn();
-        const dragend   = jest.fn();
+        const dragstart = vi.fn();
+        const drag      = vi.fn();
+        const dragend   = vi.fn();
 
         marker.on('dragstart', dragstart);
         marker.on('drag',      drag);
@@ -509,9 +510,9 @@ describe('marker', () => {
             .addTo(map);
         const el = marker.getElement();
 
-        const dragstart = jest.fn();
-        const drag      = jest.fn();
-        const dragend   = jest.fn();
+        const dragstart = vi.fn();
+        const drag      = vi.fn();
+        const dragend   = vi.fn();
 
         marker.on('dragstart', dragstart);
         marker.on('drag',      drag);
@@ -558,9 +559,9 @@ describe('marker', () => {
             .addTo(map);
         const el = marker.getElement();
 
-        const dragstart = jest.fn();
-        const drag      = jest.fn();
-        const dragend   = jest.fn();
+        const dragstart = vi.fn();
+        const drag      = vi.fn();
+        const dragend   = vi.fn();
 
         marker.on('dragstart', dragstart);
         marker.on('drag',      drag);
@@ -591,9 +592,9 @@ describe('marker', () => {
             .addTo(map);
         const el = marker.getElement();
 
-        const dragstart = jest.fn();
-        const drag      = jest.fn();
-        const dragend   = jest.fn();
+        const dragstart = vi.fn();
+        const drag      = vi.fn();
+        const dragend   = vi.fn();
 
         marker.on('dragstart', dragstart);
         marker.on('drag',      drag);
@@ -640,9 +641,9 @@ describe('marker', () => {
             .addTo(map);
         const el = marker.getElement();
 
-        const dragstart = jest.fn();
-        const drag      = jest.fn();
-        const dragend   = jest.fn();
+        const dragstart = vi.fn();
+        const drag      = vi.fn();
+        const dragend   = vi.fn();
 
         marker.on('dragstart', dragstart);
         marker.on('drag',      drag);
@@ -689,9 +690,9 @@ describe('marker', () => {
             .addTo(map);
         const el = marker.getElement();
 
-        const dragstart = jest.fn();
-        const drag      = jest.fn();
-        const dragend   = jest.fn();
+        const dragstart = vi.fn();
+        const drag      = vi.fn();
+        const dragend   = vi.fn();
 
         marker.on('dragstart', dragstart);
         marker.on('drag',      drag);
@@ -854,8 +855,8 @@ describe('marker', () => {
     });
 
     test('Marker removed after update when terrain is on should clear timeout', async () => {
-        jest.spyOn(global, 'setTimeout');
-        jest.spyOn(global, 'clearTimeout');
+        vi.spyOn(global, 'setTimeout');
+        vi.spyOn(global, 'clearTimeout');
         const map = createMap();
         const marker = new Marker()
             .setLngLat([0, 0])

@@ -1,3 +1,4 @@
+import {describe, test, expect, vi, Mock} from 'vitest';
 import {mat4} from 'gl-matrix';
 import {OverscaledTileID} from '../source/tile_id';
 import {SourceCache} from '../source/source_cache';
@@ -8,12 +9,12 @@ import {Transform} from '../geo/transform';
 import {drawCustom} from './draw_custom';
 import {CustomStyleLayer} from '../style/style_layer/custom_style_layer';
 
-jest.mock('./painter');
-jest.mock('./program');
-jest.mock('../source/source_cache');
-jest.mock('../source/tile');
-jest.mock('../data/bucket/symbol_bucket');
-jest.mock('../symbol/projection');
+vi.mock('./painter');
+vi.mock('./program');
+vi.mock('../source/source_cache');
+vi.mock('../source/tile');
+vi.mock('../data/bucket/symbol_bucket');
+vi.mock('../symbol/projection');
 
 describe('drawCustom', () => {
     test('should return custom render method inputs', () => {
@@ -43,9 +44,9 @@ describe('drawCustom', () => {
         tile.imageAtlasTexture = {
             bind: () => { }
         } as any;
-        // (tile.getBucket as jest.Mock).mockReturnValue(bucketMock);
+        // (tile.getBucket as Mock).mockReturnValue(bucketMock);
         const sourceCacheMock = new SourceCache(null, null, null);
-        (sourceCacheMock.getTile as jest.Mock).mockReturnValue(tile);
+        (sourceCacheMock.getTile as Mock).mockReturnValue(tile);
         sourceCacheMock.map = {showCollisionBoxes: false} as any as Map;
 
         let result;

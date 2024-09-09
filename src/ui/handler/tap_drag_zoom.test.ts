@@ -1,3 +1,4 @@
+import {describe, beforeEach, test, expect, vi} from 'vitest';
 import {beforeMapTest} from '../../util/test/util';
 import simulate from '../../../test/unit/lib/simulate_interaction';
 import {Map, MapOptions} from '../map';
@@ -7,13 +8,13 @@ function createMap() {
 }
 
 function setupEvents(map: Map) {
-    const zoomstart = jest.fn();
+    const zoomstart = vi.fn();
     map.on('zoomstart', zoomstart);
 
-    const zoom = jest.fn();
+    const zoom = vi.fn();
     map.on('zoom', zoom);
 
-    const zoomend = jest.fn();
+    const zoomend = vi.fn();
     map.on('zoomend', zoomend);
 
     return {
